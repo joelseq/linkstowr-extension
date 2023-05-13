@@ -1,0 +1,6 @@
+/* Add styles here */
+
+:root {
+  --theme-rounded-container: theme(borderRadius.md);
+  --theme-rounded-base: theme(borderRadius.sm);
+}
