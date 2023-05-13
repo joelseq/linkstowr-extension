@@ -1,5 +1,5 @@
 chrome.runtime.onInstalled.addListener(() => {
-  console.log('OmniClipper running!')
-})
+  console.log('OmniClipper running!');
+});
 
-export {}
+export {};
