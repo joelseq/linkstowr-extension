@@ -28,7 +28,7 @@
 <div
   class="flex flex-wrap space-y-2 flex-col justify-items-start p-4 container"
 >
-  <h2 class="text-lg">OmniClipper</h2>
+  <h2 class="text-lg">LinkShelf</h2>
   <textarea
     class="textarea"
     rows="4"
