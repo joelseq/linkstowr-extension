@@ -1,3 +1,5 @@
 node_modules
 dist
 vite.config.ts.timestamp-*
+# Folder containing zipped extension for publishing
+out
