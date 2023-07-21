@@ -3,6 +3,7 @@
   import {getAPI} from '../utils/api';
 
   export let accessToken: string;
+  let textAreaInput: HTMLTextAreaElement;
 
   let title = '';
   let linkNote: string = '';
@@ -16,9 +17,11 @@
         title = currentTabTitle;
       }
     });
+
+    textAreaInput.focus();
   });
 
-  function handleClick() {
+  function handleSubmit() {
     chrome.tabs.query({active: true, currentWindow: true}, async (tabs) => {
       const currentUrl = tabs[0].url;
       const api = getAPI(accessToken);
@@ -35,30 +38,44 @@
       }
     });
   }
+
+  const textareaAction = (node: HTMLElement) => {
+    const listener = (e: KeyboardEvent) => {
+      if (e.key === 'Enter' && e.ctrlKey) {
+        handleSubmit();
+      }
+    };
+    node.addEventListener('keydown', listener);
+
+    return {
+      destroy() {
+        node.removeEventListener('keydown', listener);
+      },
+    };
+  };
 </script>
 
 <!-- markup (zero or more items) goes here -->
-<label class="label">
-  <span>Title</span>
-  <input class="input" type="text" bind:value={title} />
-</label>
-<label class="label">
-  <span>Note</span>
-  <textarea
-    class="textarea"
-    rows="4"
-    placeholder="(Optional) Add some notes about the link."
-    bind:value={linkNote}
-  />
-</label>
-<button
-  type="submit"
-  class="btn variant-filled"
-  on:click={handleClick}
-  disabled={success}
->
-  {success ? 'Success!' : 'Save Link'}
-</button>
+<form on:submit={handleSubmit}>
+  <label class="label">
+    <span>Title</span>
+    <input class="input" type="text" bind:value={title} />
+  </label>
+  <label class="label">
+    <span>Note</span>
+    <textarea
+      use:textareaAction
+      bind:this={textAreaInput}
+      class="textarea"
+      rows="4"
+      placeholder="(Optional) Add some notes about the link."
+      bind:value={linkNote}
+    />
+  </label>
+  <button type="submit" class="btn w-full variant-filled" disabled={success}>
+    {success ? 'Success!' : 'Save Link'}
+  </button>
+</form>
 
 <style>
   /* your styles go here */
