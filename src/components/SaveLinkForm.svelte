@@ -39,6 +39,11 @@
     });
   }
 
+  function handleFormSubmit(e: SubmitEvent) {
+    e.preventDefault();
+    handleSubmit();
+  }
+
   const textareaAction = (node: HTMLElement) => {
     const listener = (e: KeyboardEvent) => {
       if (e.key === 'Enter' && e.ctrlKey) {
@@ -56,7 +61,7 @@
 </script>
 
 <!-- markup (zero or more items) goes here -->
-<form on:submit={handleSubmit}>
+<form on:submit={handleFormSubmit}>
   <label class="label">
     <span>Title</span>
     <input class="input" type="text" bind:value={title} />
