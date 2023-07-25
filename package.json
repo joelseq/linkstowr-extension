@@ -9,7 +9,8 @@
     "preview": "vite preview",
     "check": "svelte-check --tsconfig ./tsconfig.json",
     "zip": "tsx scripts/zipExtension.ts",
-    "pre:publish": "npm run build && npm run zip"
+    "pre:publish": "npm run build && npm run zip",
+    "version": "node version-bump.mjs && git add manifest.json"
   },
   "devDependencies": {
     "@crxjs/vite-plugin": "^1.0.14",
