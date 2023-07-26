@@ -1,0 +1,34 @@
+name: Publish
+
+on:
+  push:
+    tags:
+      - '*'
+
+jobs:
+  build:
+    name: Publish webextension
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '18.x'
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 8
+          run_install: |
+            - recursive: true
+              args: [--frozen-lockfile]
+      - name: Build
+        run: |
+          pnpm pre:publish
+      - name: Upload & release
+        uses: mnao305/chrome-extension-upload@v4.0.1
+        with:
+          file-path: out/extension.zip
+          extension-id: ahppmgflbaeiphlkkgngijgmfapabgee
+          client-id: ${{ secrets.CLIENT_ID }}
+          client-secret: ${{ secrets.CLIENT_SECRET }}
+          refresh-token: ${{ secrets.REFRESH_TOKEN }}

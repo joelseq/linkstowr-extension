@@ -9,6 +9,12 @@ const __dirname = path.dirname(__filename);
 // Got the following code from ChatGPT
 
 function createZip(directoryPath: string, zipFilePath: string): void {
+  const zipFileFolder: string = zipFilePath.split('/').slice(0, -1).join('/');
+
+  if (!fs.existsSync(zipFileFolder)) {
+    fs.mkdirSync(zipFileFolder);
+  }
+
   const output = fs.createWriteStream(zipFilePath);
   const archive = archiver('zip', {
     zlib: {level: 9}, // Compression level (0-9)
