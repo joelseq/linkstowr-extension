@@ -2,7 +2,7 @@
 	"name": "LinkShelf",
 	"short_name": "LinkShelf",
 	"description": "Save links and sync it to your Obsidian vault.",
-	"version": "0.1.1",
+	"version": "0.1.2",
 	"manifest_version": 3,
 	"icons": {
 		"16": "src/assets/icons/icon-16.png",
