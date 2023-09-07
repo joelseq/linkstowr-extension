@@ -1,5 +1,5 @@
 chrome.runtime.onInstalled.addListener(() => {
-  console.log('LinkShelf running!');
+  console.log('LinkStowr running!');
 });
 
 export {};

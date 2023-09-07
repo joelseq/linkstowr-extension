@@ -4,7 +4,7 @@
   import Fa from 'svelte-fa';
   import {faGear} from '@fortawesome/free-solid-svg-icons';
 
-  const APP_URL = import.meta.env.VITE_APP_URL;
+  const APP_URL = import.meta.env.VITE_APP_URL as string;
 
   let accessToken = '';
   let accessTokenInput = '';
@@ -42,7 +42,7 @@
     : 'container'}"
 >
   <div class="flex flex-wrap justify-between">
-    <h2 class="text-lg">LinkShelf</h2>
+    <h2 class="text-lg">LinkStowr</h2>
     {#if accessToken && accessToken !== ''}
       <button class="btn" on:click={toggleSettings}>
         <Fa icon={faGear} />
