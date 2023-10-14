@@ -1,5 +1,5 @@
 <script lang="ts">
-  import {onMount} from 'svelte';
+  import {onMount} from 'svelte/internal';
   import SaveLinkForm from './SaveLinkForm.svelte';
   import Fa from 'svelte-fa';
   import {faGear} from '@fortawesome/free-solid-svg-icons';
@@ -8,6 +8,10 @@
 
   let accessToken = '';
   let accessTokenInput = '';
+
+  let customAPIURL: string | null = null;
+  let customAPIURLInput = '';
+  let showSaveURLError = false;
 
   let showSettings = false;
 
@@ -21,10 +25,52 @@
     accessToken = undefined;
     showSettings = false;
   };
+  const isValidHttpUrl = (input: string): boolean => {
+    let url;
+
+    try {
+      url = new URL(input);
+    } catch (_) {
+      return false;
+    }
+
+    return url.protocol === 'http:' || url.protocol === 'https:';
+  };
+
+  const saveURL = async () => {
+    // Unsetting a custom URL
+    if (customAPIURLInput == null || customAPIURLInput === '') {
+      customAPIURL = null;
+      await chrome.storage.sync.remove('customAPIURL');
+      showSaveURLError = false;
+      showSettings = false;
+      return;
+    }
+    // Setting a custom URL
+    if (
+      customAPIURLInput != null &&
+      customAPIURLInput !== '' &&
+      isValidHttpUrl(customAPIURLInput)
+    ) {
+      customAPIURL = customAPIURLInput;
+      await chrome.storage.sync.set({customAPIURL});
+      showSaveURLError = false;
+      showSettings = false;
+      return;
+    } else {
+      showSaveURLError = true;
+    }
+  };
 
   onMount(() => {
     chrome.storage.sync.get('lsToken').then((data) => {
       accessToken = data.lsToken;
+    });
+    chrome.storage.sync.get('customAPIURL').then((data) => {
+      if (data.customAPIURL) {
+        customAPIURL = data.customAPIURL;
+        customAPIURLInput = data.customAPIURL;
+      }
     });
   });
 
@@ -37,14 +83,16 @@
 
 <!-- markup (zero or more items) goes here -->
 <div
-  class="flex flex-wrap space-y-2 flex-col justify-items-start p-4 {showSettings
-    ? 'container-sm'
-    : 'container'}"
+  class="flex flex-wrap space-y-2 flex-col justify-items-start p-4 container"
 >
   <div class="flex flex-wrap justify-between">
     <h2 class="text-lg">LinkStowr</h2>
     {#if accessToken && accessToken !== ''}
-      <button class="btn" on:click={toggleSettings}>
+      <button
+        class="btn"
+        on:click={toggleSettings}
+        aria-label="Toggle Settings"
+      >
         <Fa icon={faGear} />
       </button>{/if}
   </div>
@@ -77,13 +125,36 @@
       >
     </form>
   {:else if showSettings}
-    <div class="flex justify-center align-center">
+    <div class="flex flex-col justify-center align-center">
       <button class="btn variant-filled-primary" on:click={clearToken}
         >Clear Token</button
       >
+      <form class="mt-8" on:submit|preventDefault={saveURL}>
+        <label class="label">
+          <span>Custom Server URL:</span>
+          <input
+            class="input"
+            type="url"
+            placeholder="Custom Server URL"
+            bind:value={customAPIURLInput}
+          />
+        </label>
+        <p class="mb-2">
+          Use this if you are self-hosting your own instance of the LinkStowr
+          API.
+        </p>
+        <button class="btn variant-filled w-full" type="submit">Save URL</button
+        >
+        {#if showSaveURLError}
+          <p class="text-red-700">
+            Please enter a valid URL or clear the input to remove the custom
+            URL.
+          </p>
+        {/if}
+      </form>
     </div>
   {:else}
-    <SaveLinkForm {accessToken} />
+    <SaveLinkForm {customAPIURL} {accessToken} />
   {/if}
 </div>
 
@@ -91,9 +162,5 @@
   /* your styles go here */
   .container {
     width: 360px;
-  }
-
-  .container-sm {
-    width: 240px;
   }
 </style>
