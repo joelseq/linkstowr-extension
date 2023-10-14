@@ -1,8 +1,8 @@
 import axios from 'axios';
 
-export function getAPI(accessToken: string) {
+export function getAPI(baseURL: string, accessToken: string) {
   return axios.create({
-    baseURL: import.meta.env.VITE_API_URL,
+    baseURL,
     timeout: 10000,
     headers: {'X-Api-Token': accessToken},
   });

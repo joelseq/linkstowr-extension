@@ -1,13 +1,18 @@
 <script lang="ts">
-  import {onMount} from 'svelte';
+  import {onMount} from 'svelte/internal';
   import {getAPI} from '../utils/api';
 
+  export let customAPIURL: string | null;
   export let accessToken: string;
   let textAreaInput: HTMLTextAreaElement;
 
   let title = '';
   let linkNote: string = '';
   let success: boolean = false;
+  const baseAPIURL =
+    customAPIURL != null && customAPIURL !== ''
+      ? customAPIURL
+      : (import.meta.env.VITE_API_URL as string);
 
   onMount(() => {
     chrome.tabs.query({active: true, currentWindow: true}, async (tabs) => {
@@ -24,7 +29,7 @@
   function handleSubmit() {
     chrome.tabs.query({active: true, currentWindow: true}, async (tabs) => {
       const currentUrl = tabs[0].url;
-      const api = getAPI(accessToken);
+      const api = getAPI(baseAPIURL, accessToken);
 
       const response = await api.post('/api/links', {
         title,
