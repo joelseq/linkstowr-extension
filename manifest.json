@@ -2,7 +2,7 @@
 	"name": "LinkStowr",
 	"short_name": "LinkStowr",
 	"description": "Save links and sync it to your Obsidian vault.",
-	"version": "0.3.1",
+	"version": "0.4.0",
 	"manifest_version": 3,
 	"icons": {
 		"16": "src/assets/icons/icon-16.png",
