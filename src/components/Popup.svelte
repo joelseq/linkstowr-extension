@@ -126,7 +126,7 @@
     </form>
   {:else if showSettings}
     <div class="flex flex-col justify-center align-center">
-      <button class="btn variant-filled-primary" on:click={clearToken}
+      <button class="btn variant-filled-error" on:click={clearToken}
         >Clear Token</button
       >
       <form class="mt-8" on:submit|preventDefault={saveURL}>
@@ -162,5 +162,6 @@
   /* your styles go here */
   .container {
     width: 360px;
+    background: white;
   }
 </style>

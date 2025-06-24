@@ -19,8 +19,16 @@ export default defineConfig({
   css: {
     postcss,
   },
+  server: {
+    cors: {
+      origin: [/chrome-extension:\/\//],
+    },
+  },
   test: {
     globals: true,
     environment: 'jsdom',
+  },
+  legacy: {
+    skipWebSocketTokenCheck: true,
   },
 });

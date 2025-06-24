@@ -1,5 +1,5 @@
 // Your selected Skeleton theme:
-import '@skeletonlabs/skeleton/themes/theme-crimson.css';
+import '../theme.postcss';
 
 // This contains the bulk of Skeletons required styles:
 // NOTE: this will be renamed skeleton.css in the v2.x release.

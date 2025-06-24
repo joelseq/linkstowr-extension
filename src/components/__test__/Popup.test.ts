@@ -1,8 +1,8 @@
 import '@testing-library/jest-dom';
-import {render, fireEvent, screen} from '@testing-library/svelte';
+import { render, fireEvent, screen } from '@testing-library/svelte';
 import userEvent from '@testing-library/user-event';
-import {setupServer} from 'msw/node';
-import {ResponseComposition, rest, RestContext, RestRequest} from 'msw';
+import { setupServer } from 'msw/node';
+import { ResponseComposition, rest, RestContext, RestRequest } from 'msw';
 import Popup from '../Popup.svelte';
 
 const TEST_TAB_URL = 'https://www.obsidian.md';
@@ -48,7 +48,7 @@ const addCustomUrl = () => {
 vi.stubGlobal('chrome', {
   tabs: {
     query: async (_, callback) => {
-      await callback([{url: TEST_TAB_URL}]);
+      await callback([{ url: TEST_TAB_URL }]);
     },
   },
   storage: {
@@ -62,7 +62,7 @@ vi.stubGlobal('chrome', {
         delete syncStorage[key];
         return Promise.resolve();
       },
-      set: (input: {[key: string]: string}) => {
+      set: (input: { [key: string]: string }) => {
         Object.keys(input).forEach((k) => {
           syncStorage[k] = input[k];
         });
@@ -129,6 +129,7 @@ test('saves a link', async () => {
   const body = await requestObj.json();
   expect(body).toEqual({
     title: TEST_LINK_TITLE,
+    tags: '',
     note: TEST_LINK_NOTE,
     url: TEST_TAB_URL,
   });

@@ -1,6 +1,7 @@
 <script lang="ts">
   import {onMount} from 'svelte/internal';
   import {getAPI} from '../utils/api';
+  import {InputChip} from '@skeletonlabs/skeleton';
 
   export let customAPIURL: string | null;
   export let accessToken: string;
@@ -9,6 +10,7 @@
   let title = '';
   let linkNote: string = '';
   let success: boolean = false;
+  let tags: string[] = [];
   const baseAPIURL =
     customAPIURL != null && customAPIURL !== ''
       ? customAPIURL
@@ -35,6 +37,7 @@
         title,
         url: currentUrl,
         note: linkNote,
+        tags: tags.join(', '),
       });
 
       if (response.data?.result) {
@@ -70,6 +73,14 @@
   <label class="label">
     <span>Title</span>
     <input class="input" type="text" bind:value={title} />
+  </label>
+  <label class="label" for="tags">
+    <span>Tags</span>
+    <InputChip
+      bind:value={tags}
+      name="tags"
+      placeholder="Type a tag and press enter..."
+    />
   </label>
   <label class="label">
     <span>Note</span>
