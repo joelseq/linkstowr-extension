@@ -1,5 +1,5 @@
 <script lang="ts">
-  import {onMount} from 'svelte/internal';
+  import {onMount} from 'svelte';
   import {getAPI} from '../utils/api';
   import {InputChip} from '@skeletonlabs/skeleton';
 
