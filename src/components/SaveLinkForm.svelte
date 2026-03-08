@@ -26,22 +26,26 @@
         title = currentTabTitle;
       }
 
-      if (tabs[0].id != null) {
-        const results = await chrome.scripting.executeScript({
-          target: {tabId: tabs[0].id},
-          func: () => {
-            const description =
-              document.querySelector('meta[property="og:description"]')?.getAttribute('content') ?? '';
-            const imageUrl =
-              document.querySelector('meta[property="og:image"]')?.getAttribute('content') ?? '';
-            return {description, imageUrl};
-          },
-        });
-        const ogData = results[0]?.result;
-        if (ogData) {
-          ogDescription = ogData.description;
-          ogImageUrl = ogData.imageUrl;
+      try {
+        if (tabs[0].id != null) {
+          const results = await chrome.scripting.executeScript({
+            target: {tabId: tabs[0].id},
+            func: () => {
+              const description =
+                document.querySelector('meta[property="og:description"]')?.getAttribute('content') ?? '';
+              const imageUrl =
+                document.querySelector('meta[property="og:image"]')?.getAttribute('content') ?? '';
+              return {description, imageUrl};
+            },
+          });
+          const ogData = results[0]?.result;
+          if (ogData) {
+            ogDescription = ogData.description;
+            ogImageUrl = ogData.imageUrl;
+          }
         }
+      } catch {
+        // OG extraction is best-effort; ignore failures
       }
     });
 
