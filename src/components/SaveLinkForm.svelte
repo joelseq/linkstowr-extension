@@ -11,6 +11,8 @@
   let linkNote: string = '';
   let success: boolean = false;
   let tags: string[] = [];
+  let ogDescription: string = '';
+  let ogImageUrl: string = '';
   const baseAPIURL =
     customAPIURL != null && customAPIURL !== ''
       ? customAPIURL
@@ -22,6 +24,24 @@
 
       if (currentTabTitle && currentTabTitle !== '') {
         title = currentTabTitle;
+      }
+
+      if (tabs[0].id != null) {
+        const results = await chrome.scripting.executeScript({
+          target: {tabId: tabs[0].id},
+          func: () => {
+            const description =
+              document.querySelector('meta[property="og:description"]')?.getAttribute('content') ?? '';
+            const imageUrl =
+              document.querySelector('meta[property="og:image"]')?.getAttribute('content') ?? '';
+            return {description, imageUrl};
+          },
+        });
+        const ogData = results[0]?.result;
+        if (ogData) {
+          ogDescription = ogData.description;
+          ogImageUrl = ogData.imageUrl;
+        }
       }
     });
 
@@ -38,6 +58,8 @@
         url: currentUrl,
         note: linkNote,
         tags: tags.join(', '),
+        description: ogDescription,
+        image_url: ogImageUrl,
       });
 
       if (response.data?.result) {
