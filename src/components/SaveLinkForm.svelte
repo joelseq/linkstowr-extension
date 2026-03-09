@@ -32,9 +32,13 @@
             target: {tabId: tabs[0].id},
             func: () => {
               const description =
-                document.querySelector('meta[property="og:description"]')?.getAttribute('content') ?? '';
+                document
+                  .querySelector('meta[property="og:description"]')
+                  ?.getAttribute('content') ?? '';
               const imageUrl =
-                document.querySelector('meta[property="og:image"]')?.getAttribute('content') ?? '';
+                document
+                  .querySelector('meta[property="og:image"]')
+                  ?.getAttribute('content') ?? '';
               return {description, imageUrl};
             },
           });
