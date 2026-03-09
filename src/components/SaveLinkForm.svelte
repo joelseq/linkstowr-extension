@@ -35,10 +35,13 @@
                 document
                   .querySelector('meta[property="og:description"]')
                   ?.getAttribute('content') ?? '';
-              const imageUrl =
+              const rawImageUrl =
                 document
                   .querySelector('meta[property="og:image"]')
                   ?.getAttribute('content') ?? '';
+              const imageUrl = rawImageUrl
+                ? new URL(rawImageUrl, window.location.href).href
+                : '';
               return {description, imageUrl};
             },
           });
